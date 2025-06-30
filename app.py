@@ -12,16 +12,15 @@ app.secret_key = 'ksmadnaini1325r623e2vcdeyewcf'
 # AWS DynamoDB Setup
 dynamodb = boto3.resource(
     'dynamodb',
-    aws_access_key_id='AKIAVEP3EDM5GMU7HWBC',
-    aws_secret_access_key='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',
-    region_name='ap-south-1'
+    aws_access_key_id='AKIAVEP3EDM5BSG2ZC4V',
+    aws_secret_access_key='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',
+    region_name='us-east-1'
 )
 
 
 users_table = dynamodb.Table('travelgo_users')
 trains_table = dynamodb.Table('trains')
 bookings_table = dynamodb.Table('bookings')
-
 # AWS SNS Setup
 sns_client = boto3.client(
     'sns',
@@ -30,9 +29,16 @@ sns_client = boto3.client(
     region_name='ap-south-1'
 )
 
-SNS_TOPIC_ARN = 'arn:aws:sns:ap-south-1:353250843450:TravelGoBookingTopic'
+SNS_TOPIC_ARN = 'arn:aws:sns:us-east-1:418272775181:TravelGo:b7d6f5bc-7710-49de-97bc-ddecff5fd023'
 
 
+this is updated repo
+
+
+
+
+
+#test changes
 def send_sns_notification(subject, message):
     try:
         sns_client.publish(
