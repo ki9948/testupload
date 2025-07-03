@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard - TravelGo</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-image: url('../static/images/dashboard.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      color: #333;
+    }
+
+    .navbar {
+      background-color: rgba(0, 74, 173, 0.95);
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: white;
+    }
+
+    .navbar h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .navbar nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+      font-weight: 500;
+    }
+
+    .navbar .logout {
+      background-color: #ff5252;
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-weight: bold;
+    }
+
+    .dashboard-container {
+      padding: 30px;
+      max-width: 1000px;
+      margin: 40px auto;
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .Welcome {
+      font-size: 22px;
+      font-weight: 500;
+      margin-bottom: 30px;
+      color: #004aad;
+    }
+
+    .booking-options {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+
+    .booking-options a {
+      flex: 1 1 22%;
+      margin: 10px;
+      text-align: center;
+      transition: transform 0.3s;
+      min-width: 150px;
+    }
+
+    .booking-options img {
+      width: 100%;
+      max-height: 120px;
+      object-fit: cover;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .booking-options a:hover {
+      transform: scale(1.05);
+    }
+
+    .bookings {
+      background: rgba(255, 255, 255, 0.85);
+      padding: 20px 25px;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .bookings h3 {
+      margin-top: 0;
+      color: #004aad;
+      margin-bottom: 15px;
+    }
+
+    .booking-item {
+      padding: 12px 0;
+      border-bottom: 1px solid #ddd;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .booking-item:last-child {
+      border-bottom: none;
+    }
+
+    .booking-details-summary {
+      flex-grow: 1;
+      min-width: 200px;
+    }
+
+    .booking-item p {
+      margin: 2px 0;
+      color: #555;
+      font-size: 14px;
+    }
+
+    .booking-item strong {
+      color: #004aad;
+      font-size: 16px;
+    }
+
+    .cancel-btn {
+      background-color: #ff5252;
+      border: none;
+      color: white;
+      padding: 6px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .cancel-btn:hover {
+      background-color: #e63e3e;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: white;
+      background-color: rgba(0, 74, 173, 0.95);
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <h1>TravelGo</h1>
+    <nav>
+      <a href="/home">Home</a>
+      <a href="/aboutus">About Us</a>
+      <a href="/support">Support</a>
+      <a href="/logout" class="logout">Logout</a>
+    </nav>
+  </div>
+
+  <div class="dashboard-container">
+    <p class="Welcome">Welcome, {{ username }}!</p> 
+
+    <div class="booking-options">
+      <a href="/bus"><img src="../static/images/bus1.jpg" alt="Bus"></a>
+      <a href="/train"><img src="../static/images/train1.jpg" alt="Train"></a>
+      <a href="/flight"><img src="../static/images/flight1.jpg" alt="Flight"></a>
+      <a href="/hotel"><img src="../static/images/Hotel1.jpg" alt="Hotel"></a>
+    </div>
+
+    <div class="bookings">
+      <h3>YOUR BOOKINGS</h3>
+      {% if bookings %}
+        {% for booking in bookings %}
+          <div class="booking-item">
+            <div class="booking-details-summary">
+              <p><strong>{{ booking.booking_type|capitalize }} Booking</strong></p>
+
+              {% if booking.booking_type == 'hotel' %}
+                <p><strong>Hotel:</strong> {{ booking.name }}</p>
+                <p><strong>Location:</strong> {{ booking.location }}</p>
+                <p><strong>Check-in:</strong> {{ booking.checkin_date }}</p>
+                <p><strong>Check-out:</strong> {{ booking.checkout_date }}</p>
+                <p><strong>Rooms:</strong> {{ booking.num_rooms }}</p>
+                <p><strong>Guests:</strong> {{ booking.num_guests }}</p>
+
+              {% elif booking.booking_type == 'train' %}
+                <p><strong>Train:</strong> {{ booking.name }} ({{ booking.train_number }})</p>
+                <p><strong>Route:</strong> {{ booking.source }} → {{ booking.destination }}</p>
+                <p><strong>Date:</strong> {{ booking.travel_date }}</p>
+                <p><strong>Time:</strong> {{ booking.departure_time }} - {{ booking.arrival_time }}</p>
+                <p><strong>Passengers:</strong> {{ booking.num_persons }}</p>
+
+              {% elif booking.booking_type == 'bus' %}
+                <p><strong>Bus:</strong> {{ booking.name }}</p>
+                <p><strong>Route:</strong> {{ booking.source }} → {{ booking.destination }}</p>
+                <p><strong>Date:</strong> {{ booking.travel_date }}</p>
+                <p><strong>Time:</strong> {{ booking.time }}</p>
+                <p><strong>Passengers:</strong> {{ booking.num_persons }}</p>
+                <p><strong>Seats:</strong> 
+                  {% if booking.selected_seats %}
+                    {{ booking.selected_seats | join(', ') }}
+                  {% else %}
+                    None selected
+                  {% endif %}
+                </p>
+
+              {% elif booking.booking_type == 'flight' %}
+                <p><strong>Flight:</strong> {{ booking.airline }} {{ booking.flight_number }}</p>
+                <p><strong>Route:</strong> {{ booking.source }} → {{ booking.destination }}</p>
+                <p><strong>Date:</strong> {{ booking.travel_date }}</p>
+                <p><strong>Departure:</strong> {{ booking.departure_time }}</p>
+                <p><strong>Arrival:</strong> {{ booking.arrival_time }}</p>
+                <p><strong>Passengers:</strong> {{ booking.num_persons }}</p>
+                <p><strong>Seats:</strong> 
+                  {% if booking.selected_seats %}
+                    {{ booking.selected_seats | join(', ') }}
+                  {% else %}
+                    None selected
+                  {% endif %}
+                </p>
+              {% endif %}
+
+              <p><strong>Booked On:</strong> {{ booking.booking_date.split('T')[0] }}</p>
+            </div>
+
+            <div class="booking-actions">
+              <div class="total-price">₹{{ "{:,.2f}".format(booking.total_price) }}</div>
+              <form action="/cancel_booking" method="POST" onsubmit="return confirm('Are you sure you want to cancel this booking?');">
+                <input type="hidden" name="booking_id" value="{{ booking._id }}">
+                <button type="submit" class="cancel-btn">Cancel Booking</button>
+              </form>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p class="no-bookings">You have no bookings yet. Start by searching for a trip!</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <footer>
+    &copy; 2025 TravelGo. All rights reserved.
+  </footer>
+
+</body>
+</html>

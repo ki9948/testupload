@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TravelGo - Home</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Background image full screen */
+        body {
+            background: url('../static/images/world.jpg') no-repeat center center fixed;
+            background-size: cover;
+            filter: brightness(1.0);
+            z-index: -2;
+        }
+
+        .overlay {
+            background-color: rgba(0, 0, 0, 0.3);
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        /* Dashboard button */
+        .dashboard-btn {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            background-color: #ffffffcc;
+            color: #000;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .dashboard-btn:hover {
+            background-color: #f0c040;
+            color: #000;
+        }
+
+        .content {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
+
+        .content h1 {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        .content p {
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay">
+        <a href="/dashboard" class="dashboard-btn">Dashboard</a>
+        <div class="content">
+            <div>
+                <h1>Welcome to TravelGo</h1>
+                <p>Start Booking your Ticket and Safe Journey!</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

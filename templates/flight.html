@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Search Flights - TravelGo</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-image: url('../static/images/12.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      color: #333;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 40px auto;
+      padding: 30px;
+      background: rgba(255, 255, 255, 0.65);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      color: #002244;
+    }
+
+    .container h2,
+    .container label,
+    .container select,
+    .container input,
+    .container button,
+    .container strong {
+      text-shadow: 0 0 1px rgba(255, 255, 255, 0.6);
+    }
+
+    header {
+      background-color: #004aad;
+      color: white;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    header h1 {
+      font-size: 26px;
+      margin: 0;
+    }
+
+    header nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    header nav a:hover {
+      color: #ffdd57;
+    }
+
+    h2 {
+      color: #004aad;
+      margin-bottom: 25px;
+    }
+
+    form#searchform {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    select, input[type="date"], input[type="number"] {
+      flex: 1 1 160px;
+      padding: 10px;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+
+    .search-btn {
+      background-color: #004aad;
+      color: white;
+      padding: 10px 18px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s;
+    }
+
+    .search-btn:hover {
+      background-color: #00307c;
+    }
+
+    .filters, .sort-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 20px;
+      margin-bottom: 10px;
+      padding: 10px 0;
+      border-top: 1px solid #ddd;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .filters label, .sort-row label {
+      margin-right: 10px;
+      font-weight: 500;
+    }
+
+    .flight-list {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .flight-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f9fbff;
+      border: 1px solid #dbe7ff;
+      padding: 15px 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      flex-wrap: wrap;
+    }
+
+    .flight-card div {
+      flex-grow: 1;
+      min-width: 160px;
+    }
+
+    .flight-card strong {
+      color: #004aad;
+      font-size: 17px;
+    }
+
+    .book-btn {
+      background: #00a36c;
+      color: white;
+      padding: 8px 14px;
+      font-weight: 500;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .book-btn:hover {
+      background: #008955;
+    }
+
+    .message-box {
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      font-weight: bold;
+      display: none;
+    }
+
+    .message-box.error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .message-box.warning {
+      background-color: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeeba;
+    }
+
+    .message-box.success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    @media (max-width: 768px) {
+      .flight-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .book-btn {
+        margin-top: 10px;
+      }
+
+      .filters, .sort-row, form#searchform {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>TravelGo</h1>
+    <nav>
+      <a href="/home">Home</a>
+      <a href="/dashboard">Dashboard</a>
+      <a href="/logout">Logout</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h2>✈️ Search & Book Flights</h2>
+    <form id="searchform" class="form-inline mb-3">
+      <select id="source" class="form-control mr-2">
+        <option value="">From</option>
+        <option value="Hyderabad">Hyderabad</option>
+        <option value="Bengaluru">Bengaluru</option>
+        <option value="Chennai">Chennai</option>
+        <option value="Mumbai">Mumbai</option>
+        <option value="Delhi">Delhi</option>
+      </select>
+
+      <select id="destination" class="form-control mr-2">
+        <option value="">To</option>
+        <option value="Hyderabad">Hyderabad</option>
+        <option value="Bengaluru">Bengaluru</option>
+        <option value="Chennai">Chennai</option>
+        <option value="Mumbai">Mumbai</option>
+        <option value="Delhi">Delhi</option>
+      </select>
+
+      <input type="date" id="date" class="form-control mr-2" />
+      <input type="number" id="numPersons" class="form-control mr-2" min="1" value="1" placeholder="Passengers" />
+      <button type="button" id="search-btn" class="search-btn">Search</button>
+    </form>
+
+    <div class="filters">
+      <label><input type="checkbox" id="direct" /> Direct</label>
+      <label><input type="checkbox" id="oneStop" /> 1 Stop</label>
+      <label><input type="checkbox" id="twoStops" /> 2+ Stops</label>
+      <label><input type="checkbox" id="economy" /> Economy</label>
+      <label><input type="checkbox" id="business" /> Business</label>
+    </div>
+
+    <div class="sort-row">
+      <label for="sort">Sort by Price:</label>
+      <select id="sort">
+        <option value="">None</option>
+        <option value="low">Low to High</option>
+        <option value="high">High to Low</option>
+      </select>
+    </div>
+
+    <div id="flight-list" class="flight-list"></div>
+  </main>
+
+  <script>
+    const flights = [
+      { id: "FLT001", airline: "IndiGo", flight_number: "6E 234", source: "Hyderabad", destination: "Mumbai", departure_time: "08:00 AM", arrival_time: "09:30 AM", price_economy: 3500, price_business: null },
+      { id: "FLT002", airline: "Vistara", flight_number: "UK 876", source: "Hyderabad", destination: "Mumbai", departure_time: "10:00 AM", arrival_time: "11:45 AM", price_economy: null, price_business: 7800 },
+      { id: "FLT003", airline: "Air India", flight_number: "AI 543", source: "Bengaluru", destination: "Delhi", departure_time: "12:00 PM", arrival_time: "02:50 PM", price_economy: 4500, price_business: null },
+      { id: "FLT004", airline: "SpiceJet", flight_number: "SG 123", source: "Chennai", destination: "Hyderabad", departure_time: "06:00 AM", arrival_time: "07:20 AM", price_economy: 2800, price_business: null },
+      { id: "FLT005", airline: "Akasa Air", flight_number: "QP 456", source: "Mumbai", destination: "Bengaluru", departure_time: "09:00 PM", arrival_time: "10:30 PM", price_economy: 3200, price_business: null },
+      { id: "FLT006", airline: "GoFirst", flight_number: "G8 789", source: "Delhi", destination: "Hyderabad", departure_time: "07:00 AM", arrival_time: "09:00 AM", price_economy: null, price_business: 3900 }
+    ];
+
+    function filterFlights() {
+      const src = document.getElementById('source').value;
+      const dst = document.getElementById('destination').value;
+      const date = document.getElementById('date').value;
+      const pax = parseInt(document.getElementById('numPersons').value);
+      const list = document.getElementById('flight-list');
+
+      list.innerHTML = "";
+
+      if (!src || !dst || !date || pax < 1) return;
+
+      const filtered = flights.filter(f => f.source === src && f.destination === dst);
+
+      filtered.forEach(f => {
+        const price = f.price_economy ?? f.price_business ?? 0;
+
+        const card = document.createElement('div');
+        card.className = 'flight-card';
+        card.innerHTML = `
+          <div>
+            <strong>${f.airline} ${f.flight_number}</strong><br>
+            ${f.source} → ${f.destination}<br>
+            ${date} ${f.departure_time} - ${f.arrival_time}
+          </div>
+          <div>
+            ₹${price} x ${pax} = ₹${price * pax}
+          </div>
+          <button class="book-btn"
+            onclick="confirmFlight('${f.id}', '${f.airline}', '${f.flight_number}', '${f.source}', '${f.destination}', '${f.departure_time}', '${f.arrival_time}', '${date}', ${pax}, ${price})">
+            Book
+          </button>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    function confirmFlight(id, airline, number, src, dst, depart, arrive, date, pax, price) {
+      const url = `/confirm_flight_details?flight_id=${id}&airline=${airline}&flight_number=${number}&source=${src}&destination=${dst}&departure=${depart}&arrival=${arrive}&date=${date}&passengers=${pax}&price=${price}`;
+      window.location.href = url;
+    }
+
+    document.getElementById('search-btn').addEventListener('click', filterFlights);
+  </script>
+</body>
+</html>
